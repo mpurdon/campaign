@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package go.micro.srv.campaign;
+
+service CampaignService {
+    rpc CreateCampaign(Campaign) returns (Response) {}
+    rpc GetCampaigns(GetRequest) returns (Response) {}
+}
+
+message Campaign {
+    string id = 1;
+    string code = 2;
+    string name = 3;
+    string description = 4;
+    repeated Reward rewards = 5;
+    string user_id = 6;
+}
+
+message Reward {
+    string id = 1;
+    string campaign_id = 2;
+    string name = 3;
+    string description = 4;
+    int32  available = 5;
+}
+
+message GetRequest {}
+
+message Response {
+    bool created = 1;
+    Campaign campaign = 2;
+
+    repeated Campaign campaigns = 3;
+}

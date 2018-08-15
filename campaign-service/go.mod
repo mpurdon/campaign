@@ -1,0 +1,3 @@
+module "campaign-service"
+
+require ()

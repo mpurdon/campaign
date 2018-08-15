@@ -1,0 +1,15 @@
+{
+  "code": "TEST0001",
+  "name": "Test campaign",
+  "description": "This is a test campaign",
+  "weight": 550,
+  "rewards": [
+    {
+      "campaign_id": "campaign_001",
+      "name": "Test reward",
+      "description": "Test reward description",
+      "available": 10
+    }
+  ],
+  "user_id": "user_001"
+}
