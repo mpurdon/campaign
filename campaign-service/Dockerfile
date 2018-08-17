@@ -16,12 +16,12 @@ WORKDIR $GOPATH/src/${build_target}
 # Copy the current code into our workdir
 COPY . .
 
-RUN pwd
-RUN ls -Al proto/${service}
-
 # Need git to pull from github
-RUN apk add git
+RUN apk add git && apk add ca-certificates
 #RUN apk add protobuf
+
+# Create gouser
+RUN adduser -D -g '' gouser
 
 # Using vgo instead of go get, to get around a few
 # quirks in how go get works with sub-packages.
@@ -40,6 +40,7 @@ RUN go get "github.com/golang/protobuf/proto"
 #RUN go get "github.com/golang/protobuf/protoc-gen-go"
 RUN go get "github.com/micro/go-micro"
 RUN go get "golang.org/x/net/context"
+RUN go get "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto
@@ -48,11 +49,13 @@ RUN go get "golang.org/x/net/context"
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o ${build_target} .
 
 # Strip debugging symbols and stuff from the binary
+RUN apk --no-cache add binutils
 RUN strip ${build_target}
 
 # Compress the binary
 RUN apk --no-cache add upx
 RUN upx ${build_target}
+RUN chown gouser ${build_target}
 
 #
 # Execution Container
@@ -60,12 +63,27 @@ RUN upx ${build_target}
 
 FROM scratch
 
+ARG SERVICE
+
+ENV service $SERVICE
+ENV build_target "${service}-service"
+
+# Get the CA certs
+COPY --from=go_builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+
+# Copy the user we created in the build container
+COPY --from=go_builder /etc/passwd /etc/passwd
+
 # Here, instead of copying the binary from our host machine,
 # we pull the binary from the container named `builder`, within
 # this build context. This reaches into our previous image, finds
 # the binary we built, and pulls it into this container. Amazing!
-COPY --from=go_builder ./${build_target} .
+COPY --from=go_builder /go/src/${build_target}/${build_target} .
+
+USER gouser
 
 # Run the binary with a binary build in a separate container,
 # with all of the correct dependencies and run time libraries.
-CMD ["./${build_target}"]
+#CMD ["./${build_target}"]
+ENTRYPOINT ["./campaign-service"]
+#ENTRYPOINT ["./${build_target}"]

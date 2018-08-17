@@ -1,11 +1,12 @@
 package main
 
 import (
-	pb "./proto/campaign"
-	micro "github.com/micro/go-micro"
+	"github.com/micro/go-micro"
+	pb "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
 	"golang.org/x/net/context"
 
 	"fmt"
+	"os"
 )
 
 const (
@@ -66,6 +67,12 @@ func (s *service) GetCampaigns(ctx context.Context, req *pb.GetRequest, res *pb.
  * Main
  */
 func main() {
+
+	fmt.Println("Running with environment...")
+	for _, e := range os.Environ() {
+		//pair := strings.Split(e, "=")
+		fmt.Println(e)
+	}
 
 	repo := &Repository{}
 

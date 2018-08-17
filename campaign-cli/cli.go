@@ -9,8 +9,8 @@ import (
 	"github.com/micro/go-micro/cmd"
 	"golang.org/x/net/context"
 
-	pb "../campaign-service/proto/campaign"
 	microclient "github.com/micro/go-micro/client"
+	pb "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
 )
 
 const (
