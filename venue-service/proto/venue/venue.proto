@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package go.micro.srv.venue;
+
+service VenueService {
+    rpc FindAvailable(VenueSpecification) returns (Response) {}
+}
+
+message Venue {
+    string id = 1;
+    string name = 2;
+    string location = 3;
+    int32 capacity = 4;
+    repeated Amenity amenities = 5;
+    string user_id = 6;
+}
+
+message Amenity {
+    string id = 1;
+    string code = 2;
+    string name = 3;
+    string description = 4;
+}
+
+message VenueSpecification {
+    string location = 1;
+    int32 capacity = 2;
+    repeated Amenity amenities = 3;
+}
+
+message Response {
+    Venue venue = 1;
+    repeated Venue venues = 2;
+}

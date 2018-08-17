@@ -12,8 +12,10 @@ message Campaign {
     string code = 2;
     string name = 3;
     string description = 4;
-    repeated Reward rewards = 5;
-    string user_id = 6;
+    string location = 5;
+    repeated Reward rewards = 6;
+    string user_id = 7;
+    string venue_id = 8;
 }
 
 message Reward {
