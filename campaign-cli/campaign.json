@@ -1,15 +1,34 @@
-{
-  "code": "TEST0001",
-  "name": "Test campaign",
-  "description": "This is a test campaign",
-  "weight": 550,
-  "rewards": [
-    {
-      "campaign_id": "campaign_001",
-      "name": "Test reward",
-      "description": "Test reward description",
-      "available": 10
-    }
-  ],
-  "user_id": "user_001"
-}
+[
+  {
+    "id": "campaign_001",
+    "code": "CAMPAIGN_0001",
+    "name": "Test campaign",
+    "description": "This is a test campaign",
+    "location": "Toronto",
+    "rewards": [
+      {
+        "campaign_id": "campaign_001",
+        "name": "campaign 001 reward",
+        "description": "Test reward description",
+        "available": 10
+      }
+    ],
+    "user_id": "user_001"
+  },
+  {
+    "id": "campaign_002",
+    "code": "CAMPAIGN_0002",
+    "name": "Another Test campaign",
+    "description": "This is another test campaign",
+    "location": "New York",
+    "rewards": [
+      {
+        "campaign_id": "campaign_002",
+        "name": "campaign 002 reward",
+        "description": "Test reward description",
+        "available": 5
+      }
+    ],
+    "user_id": "user_001"
+  }
+]

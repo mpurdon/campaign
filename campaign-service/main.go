@@ -50,7 +50,7 @@ func (s *service) CreateCampaign(ctx context.Context, req *pb.Campaign, res *pb.
 
 	response, err := s.venueClient.FindAvailable(context.Background(), &venueProto.VenueSpecification{
 		Location: req.Location,
-		Capacity: int32(req.Ca),
+		Capacity: int32(req.Rewards[0].Available),
 	})
 
 	log.Printf("Found vessel: %s \n", response.Venue.Name)
