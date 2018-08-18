@@ -18,6 +18,9 @@ type VenueRepository struct {
 }
 
 func (repo *VenueRepository) FindAvailable(spec *pb.VenueSpecification) (*pb.Venue, error) {
+
+	fmt.Printf("Attempting to find venue in %s with capacity of at least %d\n", spec.Location, spec.Capacity)
+
 	for _, venue := range repo.venues {
 		if spec.Capacity <= venue.Capacity && spec.Location == venue.Location {
 			return venue, nil
@@ -43,7 +46,7 @@ func (s *service) FindAvailable(ctx context.Context, req *pb.VenueSpecification,
 
 func main() {
 	venues := []*pb.Venue{
-		&pb.Venue{Id: "venue_001", Name: "First Venue", Location: "Toronto", Capacity: 300, UserId: "user_0001"},
+		&pb.Venue{Id: "venue_001", Name: "First Venue", Location: "Toronto", Capacity: 8, UserId: "user_0001"},
 	}
 
 	repo := &VenueRepository{venues: venues}
