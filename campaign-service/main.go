@@ -48,15 +48,19 @@ type service struct {
 
 func (s *service) CreateCampaign(ctx context.Context, req *pb.Campaign, res *pb.Response) error {
 
+	fmt.Printf("Attempting to create campaign %s\n", req.Name)
+
 	response, err := s.venueClient.FindAvailable(context.Background(), &venueProto.VenueSpecification{
 		Location: req.Location,
-		Capacity: int32(req.Rewards[0].Available),
+		Capacity: 0,
+		//Capacity: int32(req.Rewards[0].Available),
 	})
 
-	log.Printf("Found vessel: %s \n", response.Venue.Name)
 	if err != nil {
 		return err
 	}
+
+	log.Printf("Found venue: %s, setting campaign venue to %s \n", response.Venue.Name, response.Venue.Id)
 
 	// We set the VesselId as the vessel we got back from our
 	// vessel service

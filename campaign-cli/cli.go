@@ -20,16 +20,16 @@ const (
 /**
  * Parse the JSON file.
  */
-func parseFile(file string) (*pb.Campaign, error) {
-	var campaign *pb.Campaign
+func parseFile(file string) ([]*pb.Campaign, error) {
+	var campaigns []*pb.Campaign
 
 	data, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
 	}
-	json.Unmarshal(data, &campaign)
+	json.Unmarshal(data, &campaigns)
 
-	return campaign, err
+	return campaigns, err
 }
 
 func main() {
@@ -44,17 +44,19 @@ func main() {
 		file = os.Args[1]
 	}
 
-	campaign, err := parseFile(file)
+	campaigns, err := parseFile(file)
 
 	if err != nil {
 		log.Fatalf("Could not parse file: %v", err)
 	}
 
-	r, err := client.CreateCampaign(context.TODO(), campaign)
-	if err != nil {
-		log.Fatalf("Could not create: %v", err)
+	for _, campaign := range campaigns {
+		r, err := client.CreateCampaign(context.TODO(), campaign)
+		if err != nil {
+			log.Fatalf("Could not create: %v", err)
+		}
+		log.Printf("Created: %t", r.Created)
 	}
-	log.Printf("Created: %t", r.Created)
 
 	getAll, err := client.GetCampaigns(context.Background(), &pb.GetRequest{})
 	if err != nil {

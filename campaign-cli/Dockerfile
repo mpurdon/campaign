@@ -9,13 +9,6 @@ ARG SERVICE
 ENV service $SERVICE
 ENV build_target "${service}-cli"
 
-RUN echo "Building the binary '${build_target}'"
-
-WORKDIR $GOPATH/src/${build_target}
-
-# Copy the current code into our workdir
-COPY . .
-
 # Need git to pull from github
 RUN apk add git && apk add ca-certificates
 #RUN apk add protobuf
@@ -44,6 +37,13 @@ RUN go get "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto
+
+RUN echo "Building the binary '${build_target}'"
+
+WORKDIR $GOPATH/src/${build_target}
+
+# Copy the current code into our workdir
+COPY . .
 
 # Build the binary.
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o ${build_target} .
