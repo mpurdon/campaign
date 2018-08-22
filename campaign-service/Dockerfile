@@ -29,11 +29,14 @@ RUN adduser -D -g '' gouser
 #RUN vgo mod sync
 
 # Requirements
+RUN go get "go.uber.org/zap"
 RUN go get "github.com/golang/protobuf/proto"
 #RUN go get "github.com/golang/protobuf/protoc-gen-go"
 RUN go get "github.com/micro/go-micro"
 RUN go get "golang.org/x/net/context"
 RUN go get "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
+RUN go get "github.com/jinzhu/gorm"
+RUN go get "github.com/lib/pq"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto
@@ -84,6 +87,4 @@ USER gouser
 
 # Run the binary with a binary build in a separate container,
 # with all of the correct dependencies and run time libraries.
-#CMD ["./${build_target}"]
 ENTRYPOINT ["./campaign-service"]
-#ENTRYPOINT ["./${build_target}"]

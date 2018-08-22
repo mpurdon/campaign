@@ -1,0 +1,16 @@
+{
+  "id": "campaign_002",
+  "code": "CAMPAIGN_0002",
+  "name": "Another Test campaign",
+  "description": "This is another test campaign",
+  "location": "New York",
+  "rewards": [
+    {
+      "campaign_id": "campaign_002",
+      "name": "campaign 002 reward",
+      "description": "Test reward description",
+      "available": 5
+    }
+  ],
+  "user_id": "user_001"
+}

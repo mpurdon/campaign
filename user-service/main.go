@@ -5,8 +5,7 @@ import (
 
 	"github.com/micro/go-micro"
 
-	pb "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
-	venueProto "github.com/mpurdon/gomicro-example/venue-service/proto/venue"
+	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
 )
 
 /**
@@ -25,23 +24,21 @@ func main() {
 	db := createConnection()
 	defer db.Close()
 
-	repo := &CampaignRepository{}
+	repo := &UserRepository{}
 
 	// Create a new service. Optionally include some options here.
 	srv := micro.NewService(
 
 		// This name must match the package name given in your protobuf definition
-		micro.Name("go.micro.srv.campaign"),
+		micro.Name("go.micro.srv.user"),
 		micro.Version("latest"),
 	)
-
-	venueClient := venueProto.NewVenueServiceClient("go.micro.srv.venue", srv.Client())
 
 	// Init will parse the command line flags.
 	srv.Init()
 
 	// Register handler
-	pb.RegisterCampaignServiceHandler(srv.Server(), &service{repo, venueClient})
+	pb.RegisterUserServiceHandler(srv.Server(), &service{repo})
 
 	// Run the server
 	if err := srv.Run(); err != nil {

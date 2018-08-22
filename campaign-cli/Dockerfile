@@ -34,6 +34,7 @@ RUN go get "github.com/golang/protobuf/proto"
 RUN go get "github.com/micro/go-micro"
 RUN go get "golang.org/x/net/context"
 RUN go get "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
+RUN go get "go.uber.org/zap"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto
@@ -79,7 +80,7 @@ COPY --from=go_builder /etc/passwd /etc/passwd
 # this build context. This reaches into our previous image, finds
 # the binary we built, and pulls it into this container. Amazing!
 COPY --from=go_builder /go/src/${build_target}/${build_target} .
-COPY --from=go_builder /go/src/${build_target}/campaign.json .
+COPY --from=go_builder /go/src/${build_target}/data ./data
 
 USER gouser
 

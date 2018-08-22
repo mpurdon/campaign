@@ -4,7 +4,6 @@ import (
 	//pb "./proto/venue"
 	"context"
 	"errors"
-	"fmt"
 	"github.com/micro/go-micro"
 	pb "github.com/mpurdon/gomicro-example/venue-service/proto/venue"
 )
@@ -19,7 +18,7 @@ type VenueRepository struct {
 
 func (repo *VenueRepository) FindAvailable(spec *pb.VenueSpecification) (*pb.Venue, error) {
 
-	fmt.Printf("Attempting to find venue in %s with capacity of at least %d\n", spec.Location, spec.Capacity)
+	Logger.Infof("Attempting to find venue in %s with capacity of at least %d\n", spec.Location, spec.Capacity)
 
 	for _, venue := range repo.venues {
 		if spec.Capacity <= venue.Capacity && spec.Location == venue.Location {
@@ -37,6 +36,7 @@ type service struct {
 func (s *service) FindAvailable(ctx context.Context, req *pb.VenueSpecification, res *pb.Response) error {
 	venue, err := s.repo.FindAvailable(req)
 	if err != nil {
+		Logger.Error(err)
 		return err
 	}
 
@@ -45,6 +45,9 @@ func (s *service) FindAvailable(ctx context.Context, req *pb.VenueSpecification,
 }
 
 func main() {
+	// Ensure that all log messages are written on shutdown
+	defer Logger.Sync()
+
 	venues := []*pb.Venue{
 		&pb.Venue{Id: "venue_001", Name: "First Venue", Location: "Toronto", Capacity: 8, UserId: "user_0001"},
 	}
@@ -61,6 +64,6 @@ func main() {
 	pb.RegisterVenueServiceHandler(srv.Server(), &service{repo})
 
 	if err := srv.Run(); err != nil {
-		fmt.Println(err)
+		Logger.Error(err)
 	}
 }

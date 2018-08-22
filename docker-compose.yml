@@ -1,6 +1,20 @@
-version: '3.1'
+version: '3.2'
 
 services:
+  postgres:
+#    image: postgres:alpine
+    image: hausgold/postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - type: bind
+        source: ./postgres_data
+        target: /var/lib/postgresql/data
+    environment:
+      MDNS_HOSTNAME: postgres.local
+      POSTGRES_USER: fc
+      POSTGRES_PASSWORD: fcpass
+      POSTGRES_DB: fc
 
   campaign-cli:
     build:
@@ -20,7 +34,10 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
-      DB_HOST: "datastore:27017"
+      DB_HOST: "postgres"
+      DB_USER: "fc"
+      DB_PASS: "fcpass"
+      DB_NAME: "fc"
 
   venue-service:
     build:
@@ -32,3 +49,4 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
+      DB_HOST: "postgres.local"
