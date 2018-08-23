@@ -23,6 +23,7 @@ message Response {
     User user = 1;
     repeated User users = 2;
     repeated Error errors = 3;
+    Token token = 4;
 }
 
 message Token {
