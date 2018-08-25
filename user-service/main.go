@@ -24,7 +24,17 @@ func main() {
 	db := createConnection()
 	defer db.Close()
 
-	repo := &UserRepository{}
+	// Automatically migrates the user struct
+	// into database columns/types etc. This will
+	// check for changes and migrate them each time
+	// this service is restarted.
+	//db.AutoMigrate(&pb.User{})
+
+	repo := &UserRepository{
+		db: db,
+	}
+
+	tokenService := &TokenService{repo}
 
 	// Create a new service. Optionally include some options here.
 	srv := micro.NewService(
@@ -38,7 +48,7 @@ func main() {
 	srv.Init()
 
 	// Register handler
-	pb.RegisterUserServiceHandler(srv.Server(), &service{repo})
+	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService})
 
 	// Run the server
 	if err := srv.Run(); err != nil {

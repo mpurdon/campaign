@@ -1,8 +1,11 @@
 version: '3.2'
 
 services:
+
+  #
+  # Postgresql Service
+  #
   postgres:
-#    image: postgres:alpine
     image: hausgold/postgres
     ports:
       - 5432:5432
@@ -16,14 +19,9 @@ services:
       POSTGRES_PASSWORD: fcpass
       POSTGRES_DB: fc
 
-  campaign-cli:
-    build:
-      context: ./campaign-cli
-      args:
-        SERVICE: campaign
-    environment:
-      MICRO_REGISTRY: "mdns"
-
+  #
+  # Campaign Service
+  #
   campaign-service:
     build:
       context: ./campaign-service
@@ -39,6 +37,9 @@ services:
       DB_PASS: "fcpass"
       DB_NAME: "fc"
 
+  #
+  # Venue Service
+  #
   venue-service:
     build:
       context: ./venue-service
@@ -50,3 +51,21 @@ services:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
       DB_HOST: "postgres.local"
+
+  #
+  # User Service
+  #
+  user-service:
+    build:
+      context: ./user-service
+      args:
+        SERVICE: user
+    ports:
+    - 50053:50051
+    environment:
+      MICRO_ADDRESS: ":50051"
+      MICRO_REGISTRY: "mdns"
+      DB_HOST: "postgres"
+      DB_USER: "fc"
+      DB_PASS: "fcpass"
+      DB_NAME: "fc"

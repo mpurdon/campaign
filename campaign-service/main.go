@@ -25,7 +25,9 @@ func main() {
 	db := createConnection()
 	defer db.Close()
 
-	repo := &CampaignRepository{}
+	repo := &CampaignRepository{
+		db: db,
+	}
 
 	// Create a new service. Optionally include some options here.
 	srv := micro.NewService(

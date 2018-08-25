@@ -37,6 +37,9 @@ RUN go get "golang.org/x/net/context"
 RUN go get "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
 RUN go get "github.com/jinzhu/gorm"
 RUN go get "github.com/lib/pq"
+RUN go get "github.com/satori/go.uuid"
+RUN go get "golang.org/x/crypto/bcrypt"
+RUN go get "github.com/dgrijalva/jwt-go"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto
