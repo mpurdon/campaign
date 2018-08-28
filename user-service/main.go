@@ -28,7 +28,7 @@ func main() {
 	// into database columns/types etc. This will
 	// check for changes and migrate them each time
 	// this service is restarted.
-	//db.AutoMigrate(&pb.User{})
+	db.AutoMigrate(&pb.User{})
 
 	repo := &UserRepository{
 		db: db,

@@ -40,6 +40,7 @@ RUN go get "github.com/lib/pq"
 RUN go get "github.com/satori/go.uuid"
 RUN go get "golang.org/x/crypto/bcrypt"
 RUN go get "github.com/dgrijalva/jwt-go"
+RUN go get "github.com/satori/go.uuid"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto

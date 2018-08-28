@@ -37,6 +37,8 @@ RUN go get "golang.org/x/net/context"
 RUN go get "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
 RUN go get "github.com/jinzhu/gorm"
 RUN go get "github.com/lib/pq"
+# @TODO: Do we really need this import?
+RUN go get "github.com/satori/go.uuid"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto

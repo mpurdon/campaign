@@ -26,14 +26,14 @@ type UserRepository struct {
  * Create a database record for the given user
  */
 func (repo *UserRepository) Create(user *pb.User) error {
-	Logger.Infof("Creating user %s", user.Name)
+	Logger.Infof("inserting user %s into database", user.Name)
 
 	if err := repo.db.Create(user).Error; err != nil {
-		Logger.Errorf("query error adding user: %s", err)
+		Logger.Errorf("query error adding user: %v", err)
 		return err
 	}
 
-	Logger.Infof("Added user with id: %d", user.Id)
+	Logger.Infof("added user with id: %d", user.Id)
 	return nil
 }
 

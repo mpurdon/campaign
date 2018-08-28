@@ -1,12 +1,45 @@
 package main
 
 import (
+	"errors"
 	"golang.org/x/net/context"
 
-	venueProto "github.com/mpurdon/gomicro-example/venue-service/proto/venue"
-	//venueProto "../venue-service/proto/venue"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/metadata"
+	"github.com/micro/go-micro/server"
+
 	pb "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
+	userService "github.com/mpurdon/gomicro-example/user-service/proto/user"
+	venueProto "github.com/mpurdon/gomicro-example/venue-service/proto/venue"
 )
+
+/**
+ * Wraps a handler function to provide authentication
+ */
+func AuthWrapper(fn server.HandlerFunc) server.HandlerFunc {
+	return func(ctx context.Context, req server.Request, resp interface{}) error {
+		meta, ok := metadata.FromContext(ctx)
+		if !ok {
+			return errors.New("no auth meta-data found in request")
+		}
+		token := meta["Token"]
+		Logger.Infof("Authenticating with token: %s", token)
+
+		// Auth here
+		authClient := userService.NewUserServiceClient("go.micro.srv.user", client.DefaultClient)
+		authResp, err := authClient.ValidateToken(ctx, &userService.Token{
+			Token: token,
+		})
+		Logger.Infof("Auth response: %s", authResp)
+		Logger.Infof("Error: %v", err)
+		if err != nil {
+			return err
+		}
+
+		err = fn(ctx, req, resp)
+		return err
+	}
+}
 
 // Service should implement all of the methods to satisfy the service
 // we defined in our protobuf definition. You can check the interface

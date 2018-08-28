@@ -5,7 +5,6 @@ import (
 
 	"github.com/micro/cli"
 	"github.com/micro/go-micro"
-	"github.com/micro/go-micro/cmd"
 	"golang.org/x/net/context"
 
 	microclient "github.com/micro/go-micro/client"
@@ -14,25 +13,26 @@ import (
 
 func main() {
 
-	cmd.Init()
-
-	// Create new greeter client
-	client := pb.NewUserServiceClient("go.micro.srv.user", microclient.DefaultClient)
+	// Create new user client
+	client := pb.NewUserServiceClient(
+		"go.micro.srv.user",
+		microclient.DefaultClient,
+	)
 
 	// Define our flags
 	service := micro.NewService(
 		micro.Flags(
 			cli.StringFlag{
 				Name:  "name",
-				Usage: "Your full name",
+				Usage: "User full name",
 			},
 			cli.StringFlag{
 				Name:  "email",
-				Usage: "Your email",
+				Usage: "User email address",
 			},
 			cli.StringFlag{
 				Name:  "password",
-				Usage: "Your password",
+				Usage: "User password",
 			},
 		),
 	)
@@ -42,38 +42,65 @@ func main() {
 
 		micro.Action(func(c *cli.Context) {
 
-			name := c.String("name")
-			email := c.String("email")
-			password := c.String("password")
+			/*
+				name := c.String("name")
+				email := c.String("email")
+				password := c.String("password")
+			*/
 
-			// Call our user service
-			r, err := client.Create(context.TODO(), &pb.User{
+			name := "Matthew Purdon"
+			email := "mdjpurdon@gmail.com"
+			password := "password"
+
+			Logger.Infof("creating user from arguments '%s<%s>'", name, email)
+
+			user := &pb.User{
 				Name:     name,
 				Email:    email,
 				Password: password,
-			})
+			}
+			Logger.Infof("attempting to create user: %v", user)
+
+			// Call our user service
+			r, err := client.Create(context.TODO(), user)
 
 			if err != nil {
-				Logger.Fatalf("Could not create: %v", err)
+				Logger.Fatalf("Could not create user: %v", err)
 			}
 
-			Logger.Infof("Created: %s", r.User.Id)
+			Logger.Infof("Created user with id: %d", r.User.Id)
 
-			getAll, err := client.GetAll(context.Background(), &pb.Request{})
+			Logger.Info("attempting to get all users:")
+			response, err := client.GetAll(context.Background(), &pb.Request{})
 			if err != nil {
 				Logger.Fatalf("Could not list users: %v", err)
 			}
 
-			for _, v := range getAll.Users {
+			for _, v := range response.Users {
 				Logger.Info(v)
 			}
+
+			login := &pb.User{
+				Email:    email,
+				Password: password,
+			}
+			Logger.Infof("attempting to log in %v", login)
+
+			authResponse, err := client.Auth(context.TODO(), login)
+			if err != nil {
+				Logger.Fatalf("could not authenticate user: %s, error: %v\n", email, err)
+			}
+
+			Logger.Infof("your access token is: %s \n", authResponse.Token)
 
 			os.Exit(0)
 		}),
 	)
 
-	// Run the server
+	// Run the service
 	if err := service.Run(); err != nil {
 		Logger.Error(err)
 	}
+
+	os.Exit(0)
 }

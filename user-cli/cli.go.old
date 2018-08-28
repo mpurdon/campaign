@@ -1,0 +1,79 @@
+package main
+
+import (
+	"os"
+
+	"github.com/micro/cli"
+	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/cmd"
+	"golang.org/x/net/context"
+
+	microclient "github.com/micro/go-micro/client"
+	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
+)
+
+func main() {
+
+	cmd.Init()
+
+	// Create new user client
+	client := pb.NewUserServiceClient("go.micro.srv.user", microclient.DefaultClient)
+
+	// Define our flags
+	service := micro.NewService(
+		micro.Flags(
+			cli.StringFlag{
+				Name:  "name",
+				Usage: "Your full name",
+			},
+			cli.StringFlag{
+				Name:  "email",
+				Usage: "Your email",
+			},
+			cli.StringFlag{
+				Name:  "password",
+				Usage: "Your password",
+			},
+		),
+	)
+
+	// Start as service
+	service.Init(
+
+		micro.Action(func(c *cli.Context) {
+
+			name := c.String("name")
+			email := c.String("email")
+			password := c.String("password")
+
+			// Call our user service
+			r, err := client.Create(context.TODO(), &pb.User{
+				Name:     name,
+				Email:    email,
+				Password: password,
+			})
+
+			if err != nil {
+				Logger.Fatalf("Could not create: %v", err)
+			}
+
+			Logger.Infof("Created: %s", r.User.Id)
+
+			getAll, err := client.GetAll(context.Background(), &pb.Request{})
+			if err != nil {
+				Logger.Fatalf("Could not list users: %v", err)
+			}
+
+			for _, v := range getAll.Users {
+				Logger.Info(v)
+			}
+
+			os.Exit(0)
+		}),
+	)
+
+	// Run the server
+	if err := service.Run(); err != nil {
+		Logger.Error(err)
+	}
+}

@@ -25,6 +25,12 @@ func main() {
 	db := createConnection()
 	defer db.Close()
 
+	// Automatically migrates the campaign struct
+	// into database columns/types etc. This will
+	// check for changes and migrate them each time
+	// this service is restarted.
+	db.AutoMigrate(&pb.Campaign{})
+
 	repo := &CampaignRepository{
 		db: db,
 	}
@@ -35,6 +41,7 @@ func main() {
 		// This name must match the package name given in your protobuf definition
 		micro.Name("go.micro.srv.campaign"),
 		micro.Version("latest"),
+		micro.WrapHandler(AuthWrapper),
 	)
 
 	venueClient := venueProto.NewVenueServiceClient("go.micro.srv.venue", srv.Client())

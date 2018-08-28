@@ -9,3 +9,5 @@ docker-compose -f docker-compose-cli.yml run user-cli command \
   --password="Testing123"
 
 docker-compose -f docker-compose-cli.yml run campaign-cli command
+
+docker-compose -f docker-compose-cli.yml run  user-cli command

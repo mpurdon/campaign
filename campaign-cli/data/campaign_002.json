@@ -9,7 +9,7 @@
       "campaign_id": "campaign_002",
       "name": "campaign 002 reward",
       "description": "Test reward description",
-      "available": 5
+      "available": 50
     }
   ],
   "user_id": "user_001"
