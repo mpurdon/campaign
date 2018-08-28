@@ -1,55 +1,17 @@
 package main
 
 import (
-	//pb "./proto/venue"
-	"context"
-	"errors"
 	"github.com/micro/go-micro"
 	pb "github.com/mpurdon/gomicro-example/venue-service/proto/venue"
 )
-
-type Repository interface {
-	FindAvailable(specification *pb.VenueSpecification) (*pb.Venue, error)
-}
-
-type VenueRepository struct {
-	venues []*pb.Venue
-}
-
-func (repo *VenueRepository) FindAvailable(spec *pb.VenueSpecification) (*pb.Venue, error) {
-
-	Logger.Infof("Attempting to find venue in %s with capacity of at least %d\n", spec.Location, spec.Capacity)
-
-	for _, venue := range repo.venues {
-		if spec.Capacity <= venue.Capacity && spec.Location == venue.Location {
-			return venue, nil
-		}
-	}
-
-	return nil, errors.New("no venue matches the given specifications")
-}
-
-type service struct {
-	repo Repository
-}
-
-func (s *service) FindAvailable(ctx context.Context, req *pb.VenueSpecification, res *pb.Response) error {
-	venue, err := s.repo.FindAvailable(req)
-	if err != nil {
-		Logger.Error(err)
-		return err
-	}
-
-	res.Venue = venue
-	return nil
-}
 
 func main() {
 	// Ensure that all log messages are written on shutdown
 	defer Logger.Sync()
 
 	venues := []*pb.Venue{
-		&pb.Venue{Id: "venue_001", Name: "First Venue", Location: "Toronto", Capacity: 8, UserId: "user_0001"},
+		&pb.Venue{Id: "venue_001", Name: "First Venue", Location: "Toronto", Capacity: 10, UserId: "user_0001"},
+		&pb.Venue{Id: "venue_002", Name: "Second Venue", Location: "Toronto", Capacity: 200, UserId: "user_0001"},
 	}
 
 	repo := &VenueRepository{venues: venues}
