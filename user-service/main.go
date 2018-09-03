@@ -1,9 +1,8 @@
 package main
 
 import (
-	"os"
-
 	"github.com/micro/go-micro"
+	"os"
 
 	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
 )
@@ -22,16 +21,11 @@ func main() {
 	}
 
 	db := createConnection()
+	Migrate(db)
 	defer db.Close()
 
-	// Automatically migrates the user struct
-	// into database columns/types etc. This will
-	// check for changes and migrate them each time
-	// this service is restarted.
-	db.AutoMigrate(&pb.User{})
-
 	repo := &UserRepository{
-		db: db,
+		orm: db,
 	}
 
 	tokenService := &TokenService{repo}

@@ -1,5 +1,5 @@
 #!/bin/bash
-# wait-for-db.sh
+# wait-for-orm.sh
 
 set -e
 

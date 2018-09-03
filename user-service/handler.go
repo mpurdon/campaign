@@ -33,6 +33,7 @@ func (s *service) Create(ctx context.Context, req *pb.User, res *pb.Response) er
 	}
 
 	req.Password = string(hashedPass)
+
 	if err := s.repo.Create(req); err != nil {
 		return errors.New(fmt.Sprintf("error creating user: %v", err))
 	}
@@ -91,7 +92,7 @@ func (repo *CampaignRepository) GetCampaign(guid string) (*pb.Campaign, error) {
     var campaign *pb.Campaign
     campaign.Guid = guid
 
-    if err := repo.db.First(&campaign).Error; err != nil {
+    if err := repo.orm.First(&campaign).Error; err != nil {
         Logger.Errorf("query error getting campaign: %s", err)
         return nil, err
     }
