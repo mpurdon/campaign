@@ -41,11 +41,14 @@ func main() {
 	// Init will parse the command line flags.
 	srv.Init()
 
+	// Get instance of the broker using our defaults
+	pubsub := srv.Server().Options().Broker
+
 	// Register handler
-	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService})
+	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService, pubsub})
 
 	// Run the server
 	if err := srv.Run(); err != nil {
-		Logger.Fatal(err)
+		Logger.Fatal("could not start the server: %+v\n", err)
 	}
 }
