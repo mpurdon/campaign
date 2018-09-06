@@ -35,7 +35,7 @@ RUN go get "github.com/golang/protobuf/proto"
 RUN go get "github.com/micro/go-micro"
 RUN go get "github.com/mpurdon/gomicro-example/user-service/proto/user"
 #RUN go get "github.com/satori/go.uuid"
-RUN go get "github.com/micro/go-plugins/broker/nats"
+#RUN go get "github.com/micro/go-plugins/broker/nats"
 
 # Generate the protobuf libs
 #RUN protoc -I. --go_out=plugins=micro:. proto/${service}/${service}.proto

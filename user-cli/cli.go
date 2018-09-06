@@ -15,7 +15,7 @@ func main() {
 
 	// Create new user client
 	client := pb.NewUserServiceClient(
-		"go.micro.srv.user",
+		"fc.user",
 		microclient.DefaultClient,
 	)
 

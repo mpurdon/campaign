@@ -39,7 +39,7 @@ func main() {
 	cmd.Init()
 
 	// Create new JWT token based client
-	client := pb.NewCampaignServiceClient("go.micro.srv.campaign", microclient.DefaultClient)
+	client := pb.NewCampaignServiceClient("fc.campaign", microclient.DefaultClient)
 
 	if len(os.Args) < 2 {
 		Logger.Fatal(errors.New("not enough arguments, expecting token"))

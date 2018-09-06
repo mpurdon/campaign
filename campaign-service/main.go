@@ -39,12 +39,12 @@ func main() {
 	srv := micro.NewService(
 
 		// This name must match the package name given in your protobuf definition
-		micro.Name("go.micro.srv.campaign"),
+		micro.Name("fc.campaign"),
 		micro.Version("latest"),
 		micro.WrapHandler(AuthWrapper),
 	)
 
-	venueClient := venueProto.NewVenueServiceClient("go.micro.srv.venue", srv.Client())
+	venueClient := venueProto.NewVenueServiceClient("fc.venue", srv.Client())
 
 	// Init will parse the command line flags.
 	srv.Init()

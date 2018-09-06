@@ -1,9 +1,8 @@
 package main
 
 import (
-	"encoding/json"
 	"errors"
-	"github.com/micro/go-micro/broker"
+	"github.com/micro/go-micro"
 	"golang.org/x/net/context"
 
 	"fmt"
@@ -18,7 +17,7 @@ import (
 type service struct {
 	repo         Repository
 	tokenService Authable
-	pubSub       broker.Broker
+	Publisher    micro.Publisher
 }
 
 /*
@@ -48,32 +47,10 @@ func (s *service) Create(ctx context.Context, req *pb.User, res *pb.Response) er
 	res.User = req
 	res.Token = &pb.Token{Token: token}
 
-	if err := s.publishEvent("user.created", req); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-/**
- * Publish events to the message broker.
- */
-func (s *service) publishEvent(topic string, user *pb.User) error {
-	body, err := json.Marshal(user)
-	if err != nil {
-		return err
-	}
-
-	msg := &broker.Message{
-		Header: map[string]string{
-			"id": user.Id,
-		},
-		Body: body,
-	}
-
 	// Publish message to broker
-	if err := s.pubSub.Publish(topic, msg); err != nil {
-		Logger.Infof("[pub] failed: %v", err)
+	if err := s.Publisher.Publish(ctx, req); err != nil {
+		Logger.Errorf("publishing user creation failed: %+v", err)
+		return err
 	}
 
 	return nil

@@ -34,18 +34,17 @@ func main() {
 	srv := micro.NewService(
 
 		// This name must match the package name given in your protobuf definition
-		micro.Name("go.micro.srv.user"),
+		micro.Name("fc.user"),
 		micro.Version("latest"),
 	)
 
 	// Init will parse the command line flags.
 	srv.Init()
 
-	// Get instance of the broker using our defaults
-	pubsub := srv.Server().Options().Broker
+	publisher := micro.NewPublisher("user.created", srv.Client())
 
 	// Register handler
-	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService, pubsub})
+	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService, publisher})
 
 	// Run the server
 	if err := srv.Run(); err != nil {

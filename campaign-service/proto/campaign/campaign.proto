@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package go.micro.srv.campaign;
+package fc.campaign;
 
 service CampaignService {
     rpc CreateCampaign(Campaign) returns (Response) {}

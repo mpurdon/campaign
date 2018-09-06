@@ -38,7 +38,7 @@ func main() {
 
 	cmd.Init()
 
-	client := pb.NewCampaignServiceClient("go.micro.srv.campaign", microclient.DefaultClient)
+	client := pb.NewCampaignServiceClient("fc.campaign", microclient.DefaultClient)
 
 	dataFile := ""
 

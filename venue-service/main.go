@@ -17,7 +17,7 @@ func main() {
 	repo := &VenueRepository{venues: venues}
 
 	srv := micro.NewService(
-		micro.Name("go.micro.srv.venue"),
+		micro.Name("fc.venue"),
 		micro.Version("latest"),
 	)
 

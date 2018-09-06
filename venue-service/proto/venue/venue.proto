@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package go.micro.srv.venue;
+package fc.venue;
 
 service VenueService {
     rpc FindAvailable(VenueSpecification) returns (Response) {}

@@ -65,6 +65,7 @@ services:
     environment:
       MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
+#      MICRO_BROKER: "nats"
       DB_HOST: "postgres"
       DB_USER: "fc"
       DB_PASS: "fcpass"
@@ -83,7 +84,23 @@ services:
     environment:
 #      MICRO_ADDRESS: ":50051"
       MICRO_REGISTRY: "mdns"
+#      MICRO_BROKER: "nats"
 #      DB_HOST: "postgres"
 #      DB_USER: "fc"
 #      DB_PASS: "fcpass"
 #      DB_NAME: "fc"
+
+  #
+  # Go-Micro API Gateway
+  #
+  microweb:
+    image: microhq/micro
+    command: web --address=0.0.0.0:8080
+    ports:
+    # outer:inner
+    - "80:8080"
+    environment:
+      MICRO_REGISTRY: "mdns"
+      MICRO_API_NAMESPACE: "fc"
+      MICRO_HANDLER: "rpc"
+#      MICRO_API_NAMESPACE: "micro.Name"
