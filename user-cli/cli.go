@@ -14,7 +14,7 @@ import (
 func main() {
 
 	// Create new account client
-	client := pb.NewUserServiceClient(
+	client := pb.NewAccountClient(
 		"fc.account",
 		microclient.DefaultClient,
 	)

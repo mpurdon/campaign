@@ -17,7 +17,7 @@ func main() {
 	cmd.Init()
 
 	// Create new user client
-	client := pb.NewUserServiceClient("fc.user", microclient.DefaultClient)
+	client := pb.NewAccountClient("fc.user", microclient.DefaultClient)
 
 	// Define our flags
 	service := micro.NewService(

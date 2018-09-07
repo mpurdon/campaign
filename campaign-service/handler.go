@@ -8,7 +8,7 @@ import (
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/server"
 
-	userService "github.com/mpurdon/gomicro-example/account-service/proto/account"
+	accountService "github.com/mpurdon/gomicro-example/account-service/proto/account"
 	pb "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
 	venueProto "github.com/mpurdon/gomicro-example/venue-service/proto/venue"
 )
@@ -26,8 +26,8 @@ func AuthWrapper(fn server.HandlerFunc) server.HandlerFunc {
 		Logger.Infof("Authenticating with token: %s", token)
 
 		// Auth here
-		authClient := userService.NewUserServiceClient("fc.account", client.DefaultClient)
-		authResp, err := authClient.ValidateToken(ctx, &userService.Token{
+		authClient := accountService.NewAccountClient("fc.account", client.DefaultClient)
+		authResp, err := authClient.ValidateToken(ctx, &accountService.Token{
 			Token: token,
 		})
 		Logger.Infof("Auth response: %s", authResp)
