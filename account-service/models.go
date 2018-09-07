@@ -1,7 +1,7 @@
 package main
 
 /**
- * Models for the User Service
+ * Models for the Account Service
  *
  * @see http://gorm.io/docs/models.html
  * @see https://github.com/gothinkster/golang-gin-realworld-example-app/blob/master/users/models.go

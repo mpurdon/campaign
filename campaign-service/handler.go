@@ -26,7 +26,7 @@ func AuthWrapper(fn server.HandlerFunc) server.HandlerFunc {
 		Logger.Infof("Authenticating with token: %s", token)
 
 		// Auth here
-		authClient := userService.NewUserServiceClient("fc.user", client.DefaultClient)
+		authClient := userService.NewUserServiceClient("fc.account", client.DefaultClient)
 		authResp, err := authClient.ValidateToken(ctx, &userService.Token{
 			Token: token,
 		})

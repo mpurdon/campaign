@@ -7,7 +7,7 @@ import (
 	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
 )
 
-const topic = "user.created"
+const topic = "account.created"
 
 type Subscriber struct{}
 

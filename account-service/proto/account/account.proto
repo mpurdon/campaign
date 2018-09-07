@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package fc.user;
+package account;
 
-service UserService {
+service Account {
     rpc Create(User) returns (Response) {}
     rpc Get(User) returns (Response) {}
     rpc GetAll(Request) returns (Response) {}

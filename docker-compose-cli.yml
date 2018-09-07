@@ -15,6 +15,6 @@ services:
     build:
       context: ./user-cli
       args:
-        SERVICE: user
+        SERVICE: account
     environment:
       MICRO_REGISTRY: "mdns"

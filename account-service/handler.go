@@ -21,11 +21,11 @@ type service struct {
 }
 
 /*
- * Create a user.
+ * Create a account.
  */
 func (s *service) Create(ctx context.Context, req *pb.User, res *pb.Response) error {
 
-	Logger.Infof("Creating user: %v", req)
+	Logger.Infof("Creating account: %v", req)
 
 	// Generates a hashed version of our password
 	hashedPass, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
@@ -36,7 +36,7 @@ func (s *service) Create(ctx context.Context, req *pb.User, res *pb.Response) er
 	req.Password = string(hashedPass)
 
 	if err := s.repo.Create(req); err != nil {
-		return errors.New(fmt.Sprintf("error creating user: %v", err))
+		return errors.New(fmt.Sprintf("error creating account: %v", err))
 	}
 
 	token, err := s.tokenService.Encode(req)
@@ -49,7 +49,7 @@ func (s *service) Create(ctx context.Context, req *pb.User, res *pb.Response) er
 
 	// Publish message to broker
 	if err := s.Publisher.Publish(ctx, req); err != nil {
-		Logger.Errorf("publishing user creation failed: %+v", err)
+		Logger.Errorf("publishing account creation failed: %+v", err)
 		return err
 	}
 
@@ -57,13 +57,13 @@ func (s *service) Create(ctx context.Context, req *pb.User, res *pb.Response) er
 }
 
 /**
- * Get user handler
+ * Get account handler
  */
 func (s *service) Get(ctx context.Context, req *pb.User, res *pb.Response) error {
 
 	user, err := s.repo.Get(req)
 	if err != nil {
-		Logger.Errorf("query error getting user: %v", err)
+		Logger.Errorf("query error getting account: %v", err)
 		return err
 	}
 
@@ -141,7 +141,7 @@ func (s *service) ValidateToken(ctx context.Context, req *pb.Token, res *pb.Toke
 	}
 
 	if claims.User.Id == "" {
-		return errors.New("invalid user")
+		return errors.New("invalid account")
 	}
 
 	res.Valid = true

@@ -74,32 +74,32 @@ func toUserModel(message *pb.User) UserModel {
 }
 
 /**
- * Create a database record for the given user
+ * Create a database record for the given account
  */
 func (repo *UserRepository) Create(user *pb.User) error {
-	Logger.Infof("inserting user %s into database", user.Name)
+	Logger.Infof("inserting account %s into database", user.Name)
 
 	userModel := toUserModel(user)
 
 	if err := repo.orm.Create(&userModel).Error; err != nil {
-		Logger.Errorf("query error adding user: %v", err)
+		Logger.Errorf("query error adding account: %v", err)
 		return err
 	}
 
-	Logger.Infof("added user: %v", userModel)
+	Logger.Infof("added account: %v", userModel)
 	return nil
 }
 
 /**
- * Get a user
+ * Get a account
  */
 func (repo *UserRepository) Get(user *pb.User) (*pb.User, error) {
-	Logger.Infof("Getting a user from the database.")
+	Logger.Infof("Getting a account from the database.")
 
 	model := toUserModel(user)
 
 	if err := repo.orm.First(model).Error; err != nil {
-		Logger.Errorf("query error getting user: %s", err)
+		Logger.Errorf("query error getting account: %s", err)
 		return nil, err
 	}
 
@@ -107,14 +107,14 @@ func (repo *UserRepository) Get(user *pb.User) (*pb.User, error) {
 }
 
 /**
- * Get a user
+ * Get a account
  */
 func (repo *UserRepository) GetByEmail(email string) (*pb.User, error) {
-	Logger.Infof("Getting a user from the database by email %s.", email)
+	Logger.Infof("Getting a account from the database by email %s.", email)
 
 	user := &pb.User{}
 	if err := repo.orm.Where("email = ?", email).First(&user).Error; err != nil {
-		Logger.Errorf("query error getting user: %s", err)
+		Logger.Errorf("query error getting account: %s", err)
 		return nil, err
 	}
 
@@ -138,10 +138,10 @@ func (repo *UserRepository) GetAll() ([]*pb.User, error) {
 }
 
 /**
- * Authenticate a user
+ * Authenticate a account
  */
 func (repo *UserRepository) Auth() ([]*pb.User, error) {
-	Logger.Infof("Authenticating a user.")
+	Logger.Infof("Authenticating a account.")
 
 	var users []*pb.User
 

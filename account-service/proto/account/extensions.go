@@ -1,4 +1,4 @@
-package go_micro_srv_user
+package account
 
 import (
 	"github.com/jinzhu/gorm"

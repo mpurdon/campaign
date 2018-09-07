@@ -59,7 +59,7 @@ func (srv *TokenService) Encode(user *pb.User) (string, error) {
 		user,
 		jwt.StandardClaims{
 			ExpiresAt: expireToken,
-			Issuer:    "fc.user",
+			Issuer:    "fc.account",
 		},
 	}
 

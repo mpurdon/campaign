@@ -13,9 +13,9 @@ import (
 
 func main() {
 
-	// Create new user client
+	// Create new account client
 	client := pb.NewUserServiceClient(
-		"fc.user",
+		"fc.account",
 		microclient.DefaultClient,
 	)
 
@@ -52,23 +52,23 @@ func main() {
 			email := "mdjpurdon@gmail.com"
 			password := "password"
 
-			Logger.Infof("creating user from arguments '%s<%s>'", name, email)
+			Logger.Infof("creating account from arguments '%s<%s>'", name, email)
 
 			user := &pb.User{
 				Name:     name,
 				Email:    email,
 				Password: password,
 			}
-			Logger.Infof("attempting to create user: %v", user)
+			Logger.Infof("attempting to create account: %v", user)
 
-			// Call our user service
+			// Call our account service
 			r, err := client.Create(context.TODO(), user)
 
 			if err != nil {
-				Logger.Fatalf("Could not create user: %v", err)
+				Logger.Fatalf("Could not create account: %v", err)
 			}
 
-			Logger.Infof("Created user with id: %d", r.User.Id)
+			Logger.Infof("Created account with id: %d", r.User.Id)
 
 			Logger.Info("attempting to get all users:")
 			response, err := client.GetAll(context.Background(), &pb.Request{})
@@ -88,7 +88,7 @@ func main() {
 
 			authResponse, err := client.Auth(context.TODO(), login)
 			if err != nil {
-				Logger.Fatalf("could not authenticate user: %s, error: %v\n", email, err)
+				Logger.Fatalf("could not authenticate account: %s, error: %v\n", email, err)
 			}
 
 			Logger.Infof("your access token is: %s \n", authResponse.Token)

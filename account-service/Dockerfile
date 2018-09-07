@@ -78,7 +78,7 @@ ENV build_target "${service}-service"
 # Get the CA certs
 COPY --from=go_builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 
-# Copy the user we created in the build container
+# Copy the account we created in the build container
 COPY --from=go_builder /etc/passwd /etc/passwd
 
 # Here, instead of copying the binary from our host machine,
@@ -91,4 +91,4 @@ USER gouser
 
 # Run the binary with a binary build in a separate container,
 # with all of the correct dependencies and run time libraries.
-ENTRYPOINT ["./user-service"]
+ENTRYPOINT ["./account-service"]

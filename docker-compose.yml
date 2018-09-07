@@ -53,13 +53,13 @@ services:
       DB_HOST: "postgres.local"
 
   #
-  # User Service
+  # Account Service
   #
-  user-service:
+  account-service:
     build:
-      context: ./user-service
+      context: account-service
       args:
-        SERVICE: user
+        SERVICE: account
     ports:
     - 50053:50051
     environment:
@@ -91,16 +91,37 @@ services:
 #      DB_NAME: "fc"
 
   #
-  # Go-Micro API Gateway
+  # The micro web provides a dashboard to view and query services.
+  #
+  # https://github.com/micro/micro/tree/master/web
   #
   microweb:
     image: microhq/micro
-    command: web --address=0.0.0.0:8080
+    command: web
     ports:
     # outer:inner
-    - "80:8080"
+    - "8082:8082"
     environment:
       MICRO_REGISTRY: "mdns"
       MICRO_API_NAMESPACE: "fc"
       MICRO_HANDLER: "rpc"
-#      MICRO_API_NAMESPACE: "micro.Name"
+
+  #
+  # Go-Micro API Gateway
+  #
+  # https://github.com/micro/micro/tree/master/api
+  #
+  microapi:
+    image: microhq/micro
+    command: api
+    ports:
+      - "80:8080"
+    environment:
+      MICRO_REGISTRY: "mdns"
+      MICRO_API_NAMESPACE: "fc"
+      MICRO_HANDLER: "rpc"
+#      MICRO_ENABLE_ACME: true
+#      MICRO_ACME_HOSTS: "funnelcrowd.com"
+#      MICRO_ENABLE_TLS: true
+#      MICRO_TLS_CERT_FILE: /path/to/cert
+#      MICRO_TLS_KEY_FILE: /path/to/key

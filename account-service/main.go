@@ -34,14 +34,14 @@ func main() {
 	srv := micro.NewService(
 
 		// This name must match the package name given in your protobuf definition
-		micro.Name("fc.user"),
+		micro.Name("fc.account"),
 		micro.Version("latest"),
 	)
 
 	// Init will parse the command line flags.
 	srv.Init()
 
-	publisher := micro.NewPublisher("user.created", srv.Client())
+	publisher := micro.NewPublisher("account.created", srv.Client())
 
 	// Register handler
 	pb.RegisterUserServiceHandler(srv.Server(), &service{repo, tokenService, publisher})

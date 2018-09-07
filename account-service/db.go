@@ -14,7 +14,7 @@ var DATABASE = map[string]string{
 	"host":     "localhost",
 	"port":     "5432",
 	"name":     "fc",
-	"user":     "fc",
+	"account":  "fc",
 	"password": "fcpass",
 }
 
@@ -42,7 +42,7 @@ func getDbConfig() map[string]string {
 
 	dbUser, ok := os.LookupEnv("DB_USER")
 	if !ok {
-		dbUser = DATABASE["user"]
+		dbUser = DATABASE["account"]
 		Logger.Infof("DB_USER not found in environment, using default value '%s'", dbUser)
 	}
 
@@ -56,7 +56,7 @@ func getDbConfig() map[string]string {
 	config["host"] = dbHost
 	config["port"] = dbPort
 	config["name"] = dbName
-	config["user"] = dbUser
+	config["account"] = dbUser
 	config["password"] = dbPassword
 
 	return config
@@ -68,8 +68,8 @@ func getDbConfig() map[string]string {
 func createConnection() *gorm.DB {
 
 	config := getDbConfig()
-	//psqlInfo := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", config["user"], config["password"], config["host"], config["name"])
-	psqlInfo := fmt.Sprintf("host=%s port=%s dbname=%s user=%s password=%s sslmode=disable", config["host"], config["port"], config["name"], config["user"], config["password"])
+	//psqlInfo := fmt.Sprintf("postgres://%s:%s@%s/%s?sslmode=disable", config["account"], config["password"], config["host"], config["name"])
+	psqlInfo := fmt.Sprintf("host=%s port=%s dbname=%s account=%s password=%s sslmode=disable", config["host"], config["port"], config["name"], config["account"], config["password"])
 
 	// @Security remove this log line.
 	Logger.Infof("Connecting to the database with ", psqlInfo)
