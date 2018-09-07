@@ -8,7 +8,7 @@ import (
 	"golang.org/x/net/context"
 
 	microclient "github.com/micro/go-micro/client"
-	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
+	pb "github.com/mpurdon/gomicro-example/account-service/proto/account"
 )
 
 func main() {

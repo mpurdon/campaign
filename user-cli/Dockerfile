@@ -33,7 +33,7 @@ RUN go get "github.com/golang/protobuf/proto"
 #RUN go get "github.com/golang/protobuf/protoc-gen-go"
 RUN go get "github.com/micro/go-micro"
 RUN go get "golang.org/x/net/context"
-RUN go get "github.com/mpurdon/gomicro-example/user-service/proto/user"
+RUN go get "github.com/mpurdon/gomicro-example/account-service/proto/account"
 RUN go get "go.uber.org/zap"
 
 # Generate the protobuf libs

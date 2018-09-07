@@ -4,7 +4,7 @@ import (
 	"github.com/micro/go-micro"
 	"golang.org/x/net/context"
 
-	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
+	pb "github.com/mpurdon/gomicro-example/account-service/proto/account"
 )
 
 const topic = "account.created"

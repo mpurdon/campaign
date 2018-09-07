@@ -6,7 +6,7 @@ import (
 	"golang.org/x/net/context"
 
 	"fmt"
-	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
+	pb "github.com/mpurdon/gomicro-example/account-service/proto/account"
 	"golang.org/x/crypto/bcrypt"
 )
 

@@ -8,8 +8,8 @@ import (
 	"github.com/micro/go-micro/metadata"
 	"github.com/micro/go-micro/server"
 
+	userService "github.com/mpurdon/gomicro-example/account-service/proto/account"
 	pb "github.com/mpurdon/gomicro-example/campaign-service/proto/campaign"
-	userService "github.com/mpurdon/gomicro-example/user-service/proto/user"
 	venueProto "github.com/mpurdon/gomicro-example/venue-service/proto/venue"
 )
 

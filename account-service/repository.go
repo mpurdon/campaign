@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 
-	pb "github.com/mpurdon/gomicro-example/user-service/proto/user"
+	pb "github.com/mpurdon/gomicro-example/account-service/proto/account"
 	"reflect"
 )
 
