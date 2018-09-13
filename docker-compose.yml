@@ -119,9 +119,34 @@ services:
     environment:
       MICRO_REGISTRY: "mdns"
       MICRO_API_NAMESPACE: "fc"
+      MICRO_API_CORS: "*"
       MICRO_HANDLER: "rpc"
+
+# "funnelcrowd.com"
+
+# Access-Control-Allow-Origin: http://api.bob.com
+# Access-Control-Allow-Credentials: true
+# Access-Control-Expose-Headers: FooBar
+
+#      MICRO_HANDLER: "rpc"
 #      MICRO_ENABLE_ACME: true
 #      MICRO_ACME_HOSTS: "funnelcrowd.com"
 #      MICRO_ENABLE_TLS: true
 #      MICRO_TLS_CERT_FILE: /path/to/cert
 #      MICRO_TLS_KEY_FILE: /path/to/key
+
+  #
+  # Portainer web-based docker manager
+  #
+  portainer:
+    image: portainer/portainer
+    restart: always
+    ports:
+    - "9000:9000"
+    command: -H unix:///var/run/docker.sock
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - portainer_data:/data
+
+volumes:
+  portainer_data:

@@ -4,16 +4,14 @@ import (
 	"errors"
 	"github.com/micro/go-micro"
 	"golang.org/x/net/context"
+	"golang.org/x/net/trace"
 
 	"fmt"
+	microerrors "github.com/micro/go-micro/errors"
 	pb "github.com/mpurdon/gomicro-example/account-service/proto/account"
 	"golang.org/x/crypto/bcrypt"
 )
 
-// Service should implement all of the methods to satisfy the service
-// we defined in our protobuf definition. You can check the interface
-// in the generated code itself for the exact method signatures etc
-// to give you a better idea.
 type service struct {
 	repo         Repository
 	tokenService Authable
@@ -107,21 +105,29 @@ func (repo *CampaignRepository) GetCampaign(guid string) (*pb.Campaign, error) {
  * Handle Authentication
  */
 func (s *service) Auth(ctx context.Context, req *pb.User, res *pb.Token) error {
+
+	// tracing
+	tr := trace.New("api.v1", "Hotel.Rates")
+	defer tr.Finish()
+
+	Logger.Infof("ctx: %+v", ctx)
+	Logger.Infof("req: %+v", req)
 	Logger.Infof("Logging in with: %s|%s", req.Email, req.Password)
+
 	user, err := s.repo.GetByEmail(req.Email)
 	if err != nil {
-		return err
+		return microerrors.BadRequest("Account.Auth", err.Error())
 	}
 
 	// Compares our given password against the hashed password
 	// stored in the database
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(req.Password)); err != nil {
-		return err
+		return microerrors.Forbidden("Account.Auth", err.Error())
 	}
 
 	token, err := s.tokenService.Encode(user)
 	if err != nil {
-		return err
+		return microerrors.InternalServerError("Account.Auth", err.Error())
 	}
 	res.Token = token
 
